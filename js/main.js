@@ -1,40 +1,31 @@
-class Prestamo{
-    constructor(){
-        this.cantidad = 0;
-        this.cuotas = 0; 
-    }
-    setCantidad(cantidad) {this.cantidad = cantidad}
-    setCuotas(cuotas) { this.cuotas = cuotas}
-    calcular(cantidad, cuotas){
-        calculo = (cantidad + (cantidad * (0.12 * cuotas))) / cuotas
-        total = (cantidad + (cantidad * (0.12 * cuotas)))
-    }
-    devolucionCuotas(cuotas, calculo){
-        alert('Tendras que devolver ' + cuotas + ' cuotas de ' + calculo)
-    }
-    totalPagar(total){
-        alert('Tendras que devolver ' + total)
-    }
-    }
+let monto = parseInt(prompt('Cuanto dinero queres pedir prestado: '))
+let cuotas = parseInt(prompt('En cuantas cuotas queres devolver el prestamo (min: 1 - max: 12): '))
 
-    
-class Cuota{
-    constructor(cuotas){
-        this.cuotas = cuotas
+class Prestamo{
+    constructor(monto, cuotas){
+        this.monto = monto;
+        this.cuota = cuotas; 
+    }
+    calcular(monto, cuotas){
+        let resultado = (monto + (monto * cuotas * 0.12)) / cuotas
+        let total = (monto + (monto * (cuotas * 0.12)))
+        alert('Vas a devolver ' + cuotas + ' cuotas de ' + resultado)
+        alert('En total devolveras ' + total)
     }
 }
 
-const prestamo = new Prestamo()
-prestamo.setCantidad(parseInt(prompt('Cuanto dinero quieres pedir prestado: ')))
+const prestamo = new Prestamo(monto, cuotas)
+prestamo.calcular(monto, cuotas)
 
-const c1 = new Cuota(1)
-const c3 = new Cuota(3)
-const c6 = new Cuota(6)
-const c9 = new Cuota(9)
-const c12 = new Cuota(12)
 
-prestamo.setCuotas(c1)
-prestamo.setCuotas(c3)
-prestamo.setCuotas(c6)
-prestamo.setCuotas(c9)
-prestamo.setCuotas(c12)
+
+
+
+
+
+/*calcularIntereses(monto, cuantasCuotas)
+
+const existe = cuotas.find((cuota) => {
+    cuota = cuantasCuotas
+    return cuota
+})*/
