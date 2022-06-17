@@ -3,7 +3,7 @@ class Prestamo{
         this.cantidad = 0;
         this.cuotas = 0; 
     }
-    setCantidad(value) {this.cantidad = value}
+    setCantidad(cantidad) {this.cantidad = cantidad}
     setCuotas(cuotas) { this.cuotas = cuotas}
     calcular(cantidad, cuotas){
         calculo = (cantidad + (cantidad * (0.12 * cuotas))) / cuotas
