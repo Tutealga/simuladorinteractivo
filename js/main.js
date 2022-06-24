@@ -25,23 +25,29 @@ class Prestamo{
         let usuarioDebe = document.querySelector('.card')
         usuarioDebe.innerHTML = `<div class="card-body">
                                   <h5 class="card-title">${usuario.nombre}</h5>
-                                  <p class="card-text">Debe: $${total}</p>
+                                  <p id="total" class="card-text">Debe: $${total}</p>
                                   <p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $${resultado}</p>
                                   <button type="button" class="btn btn-primary">Pagar</button>
                                   </div>`
 
         let boton = document.querySelector('.btn-primary')                          
         boton.onclick = () => {
+            let totalDescontado = document.querySelector('#total')
             let cuotasDescontadas = document.querySelector('#cuotas')
             if (this.cuotas > 0 && this.cuotas < 12){
+             totalDescontado.innerHTML = `<p id="total" class="card-text">Debe: $${total -= resultado}</p>`
              cuotasDescontadas.innerHTML = `<p id="cuotas" class="card-text">Cuotas: ${this.cuotas -= 1} de $${resultado}</p>`
              alert('Cuota pagada')
-            }else{
-              alert('Ya no hay cuotas por pagar')
+             while(this.cuotas <= 0){
+                let resultadoFinal = document.querySelector('#cuotas')
+                resultadoFinal.innerHTML = `<p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $0</p>`
+                break
             }
-        }
-    }
-       
+            }else{
+              alert('Ya no hay cuotas por pagar')    
+           }
+            }    
+}   
 }
 
 class Usuario{
