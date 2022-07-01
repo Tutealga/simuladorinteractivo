@@ -20,13 +20,11 @@ botonPrestamo.onclick = () => {
             const prestamo = new Prestamo(monto, existe, nuevoUsuario)
                         
             prestamo.calcular(monto, existe, nuevoUsuario, prestamo)
-            window.location.reload()
         }
 
 let botonNuevoPrestamo = document.querySelector('#boton2')                          
 botonNuevoPrestamo.onclick = () => {
             localStorage.clear()
-            window.location.reload()
         }
 
 class Prestamo{
