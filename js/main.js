@@ -1,20 +1,20 @@
 let botonPrestamo = document.querySelector('#boton1')                          
 botonPrestamo.onclick = () => {
-            let usuario = document.querySelector("#id1").value;
-            let monto = parseInt(document.querySelector("#id2").value);
-            let cuantasCuotas = parseInt(document.querySelector("#id3").value);
+            let usuario1 = document.querySelector("#id1").value;
+            localStorage.setItem('usuario',usuario1);
 
-            const cuotas = [1,2,3,4,5,6,7,8,9,10,11,12]
+            let monto1 = parseInt(document.querySelector("#id2").value);
+            localStorage.setItem('monto',monto1);
 
-            const existe = cuotas.find((cuota) => {
-                return cuota === cuantasCuotas
-                })
+            let cuantasCuotas1 = parseInt(document.querySelector("#id3").value);
+            localStorage.setItem('cuantasCuotas', cuantasCuotas1);
+        }
 
-            const nuevoUsuario = new Usuario(usuario, monto, existe)
-            const prestamo = new Prestamo(monto, existe, nuevoUsuario)
-
+let botonNuevoPrestamo = document.querySelector('#boton2')                          
+botonNuevoPrestamo.onclick = () => {
+            localStorage.clear()
             prestamo.calcular(monto, existe, nuevoUsuario, prestamo)
-            }   
+        }
 
 class Prestamo{
     constructor(monto, cuotas, usuario){
@@ -35,7 +35,6 @@ class Prestamo{
                                   <p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $${resultado}</p>
                                   <button type="button" id="pagar" class="btn btn-primary">Pagar</button>
                                   </div>`
-
         let boton = document.querySelector('#pagar')                          
         boton.onclick = () => {
             let totalDescontado = document.querySelector('#total')
@@ -48,18 +47,32 @@ class Prestamo{
                 let resultadoFinal = document.querySelector('#cuotas')
                 resultadoFinal.innerHTML = `<p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $0</p>`
                 break
-            }
-            }else{
+            }}else{
               alert('Ya no hay cuotas por pagar')    
-           }
-            }    
-}   
-}
+           }}}}
 
 class Usuario{
     constructor(nombre, prestamos, cuotas){
         this.nombre = nombre;
         this.prestamos = prestamos;
         this.cuotas = cuotas;
-    }
+    }}
+    
+let usuario = localStorage.getItem('usuario');
+let monto = parseInt(localStorage.getItem('monto'));
+let cuantasCuotas = parseInt(localStorage.getItem('cuantasCuotas'));
+
+const cuotas = [1,2,3,4,5,6,7,8,9,10,11,12]
+
+const existe = cuotas.find((cuota) => {
+        return cuota === cuantasCuotas
+    })
+
+const nuevoUsuario = new Usuario(usuario, monto, existe)
+const prestamo = new Prestamo(monto, existe, nuevoUsuario)
+
+if(usuario && monto && cuantasCuotas){
+    prestamo.calcular(monto, existe, nuevoUsuario, prestamo)
 }
+
+
