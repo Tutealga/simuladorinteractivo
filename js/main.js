@@ -2,18 +2,31 @@ let botonPrestamo = document.querySelector('#boton1')
 botonPrestamo.onclick = () => {
             let usuario1 = document.querySelector("#id1").value;
             localStorage.setItem('usuario',usuario1);
+            let usuario = localStorage.getItem('usuario');
 
             let monto1 = parseInt(document.querySelector("#id2").value);
             localStorage.setItem('monto',monto1);
+            let monto = parseInt(localStorage.getItem('monto'));
 
             let cuantasCuotas1 = parseInt(document.querySelector("#id3").value);
             localStorage.setItem('cuantasCuotas', cuantasCuotas1);
+            let cuantasCuotas = parseInt(localStorage.getItem('cuantasCuotas'));
+
+            const existe = cuotas.find((cuota) => {
+                    return cuota === cuantasCuotas
+                })
+            
+            const nuevoUsuario = new Usuario(usuario, monto, existe)
+            const prestamo = new Prestamo(monto, existe, nuevoUsuario)
+                        
+            prestamo.calcular(monto, existe, nuevoUsuario, prestamo)
+            window.location.reload()
         }
 
 let botonNuevoPrestamo = document.querySelector('#boton2')                          
 botonNuevoPrestamo.onclick = () => {
             localStorage.clear()
-            prestamo.calcular(monto, existe, nuevoUsuario, prestamo)
+            window.location.reload()
         }
 
 class Prestamo{
@@ -25,7 +38,7 @@ class Prestamo{
     calcular(monto, cuotas, usuario, prestamo){
         let resultado = (monto + (monto * cuotas * 0.12)) / cuotas
         let total = monto + (monto * cuotas * 0.12)
-        return prestamo.mostrarInfo(resultado, total, usuario)
+        return prestamo.mostrarInfo(resultado, total, usuario, prestamo)
     }
     mostrarInfo(resultado, total, usuario){
         let usuarioDebe = document.querySelector('.card')
@@ -71,7 +84,7 @@ const existe = cuotas.find((cuota) => {
 const nuevoUsuario = new Usuario(usuario, monto, existe)
 const prestamo = new Prestamo(monto, existe, nuevoUsuario)
 
-if(usuario && monto && cuantasCuotas){
+if(usuario && monto && existe){
     prestamo.calcular(monto, existe, nuevoUsuario, prestamo)
 }
 
