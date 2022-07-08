@@ -1,3 +1,5 @@
+const DateTime = luxon.DateTime
+
 let botonPrestamo = document.querySelector('#boton1')                          
 botonPrestamo.onclick = () => {
             let usuario1 = document.querySelector("#id1").value;
@@ -39,9 +41,10 @@ class Prestamo{
         return prestamo.mostrarInfo(resultado, total, usuario, prestamo)
     }
     mostrarInfo(resultado, total, usuario){
+        const fecha = DateTime.now();
         let usuarioDebe = document.querySelector('.card')
         usuarioDebe.innerHTML = `<div class="card-body">
-                                  <h5 class="card-title">${usuario.nombre}</h5>
+        <h5 class="card-title" style="display:inline">${usuario.nombre}</h5><small style="float:right">${fecha.toLocaleString()}</small>
                                   <p id="total" class="card-text">Debe: $${total}</p>
                                   <p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $${resultado}</p>
                                   <button type="button" id="pagar" class="btn btn-primary">Pagar</button>
