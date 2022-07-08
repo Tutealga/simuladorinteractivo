@@ -48,19 +48,47 @@ class Prestamo{
                                   </div>`
         let boton = document.querySelector('#pagar')                          
         boton.onclick = () => {
-            let totalDescontado = document.querySelector('#total')
-            let cuotasDescontadas = document.querySelector('#cuotas')
-            if (this.cuotas > 0 && this.cuotas < 12){
-             totalDescontado.innerHTML = `<p id="total" class="card-text">Debe: $${total -= resultado}</p>`
-             cuotasDescontadas.innerHTML = `<p id="cuotas" class="card-text">Cuotas: ${this.cuotas -= 1} de $${resultado}</p>`
-             alert('Cuota pagada')
-             while(this.cuotas <= 0){
+            while(this.cuotas <= 0){
                 let resultadoFinal = document.querySelector('#cuotas')
                 resultadoFinal.innerHTML = `<p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $0</p>`
+                Toastify({
+                    text: "Ya no hay cuotas por pagar",
+                    duration: 2000,
+                    gravity: 'bottom',
+                    position: 'center',
+                    style:{
+                        background: 'yellow'
+                    }
+                 }).showToast();   
                 break
-            }}else{
-              alert('Ya no hay cuotas por pagar')    
-           }}}}
+            }
+            if (this.cuotas > 0 && this.cuotas < 12){
+                let totalDescontado = document.querySelector('#total')
+                let cuotasDescontadas = document.querySelector('#cuotas')
+                Toastify({
+                text: "Confirmar pago de cuota",
+                duration: 3000,
+                gravity: 'bottom',
+                position: 'center',
+                onClick: () => {
+                    Toastify({
+                        text: "Cuota pagada",
+                        duration: 2000,
+                        gravity: 'top',
+                        position: 'right',
+                        style:{
+                            background: 'green'
+                        }
+                     }).showToast();
+                    totalDescontado.innerHTML = `<p id="total" class="card-text">Debe: $${total -= resultado}</p>`
+                    cuotasDescontadas.innerHTML = `<p id="cuotas" class="card-text">Cuotas: ${this.cuotas -= 1} de $${resultado}</p>`
+                     },
+                style:{
+                    background: 'red'
+                }
+             }).showToast();
+
+            }}}}
 
 class Usuario{
     constructor(nombre, prestamos, cuotas){
