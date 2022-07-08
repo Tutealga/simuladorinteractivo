@@ -1,3 +1,11 @@
 .card {
     width: 18rem;
 }
+
+body {
+    background-color: #ededed !important;
+}
+
+input {
+    border:none;
+}

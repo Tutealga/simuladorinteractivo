@@ -47,7 +47,7 @@ class Prestamo{
         <h5 class="card-title" style="display:inline">${usuario.nombre}</h5><small style="float:right">${fecha.toLocaleString()}</small>
                                   <p id="total" class="card-text">Debe: $${total}</p>
                                   <p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $${resultado}</p>
-                                  <button type="button" id="pagar" class="btn btn-primary">Pagar</button>
+                                  <button type="button" id="pagar" class="btn bg-danger">Pagar</button>
                                   </div>`
         let boton = document.querySelector('#pagar')                          
         boton.onclick = () => {
@@ -60,7 +60,8 @@ class Prestamo{
                     gravity: 'bottom',
                     position: 'center',
                     style:{
-                        background: 'yellow'
+                        background: 'yellow',
+                        color: 'black'
                     }
                  }).showToast();   
                 break
@@ -70,17 +71,17 @@ class Prestamo{
                 let cuotasDescontadas = document.querySelector('#cuotas')
                 Toastify({
                 text: "Confirmar pago de cuota",
-                duration: 3000,
+                duration: 1500,
                 gravity: 'bottom',
                 position: 'center',
                 onClick: () => {
                     Toastify({
                         text: "Cuota pagada",
-                        duration: 2000,
+                        duration: 750,
                         gravity: 'top',
                         position: 'right',
                         style:{
-                            background: 'green'
+                            background: 'green',
                         }
                      }).showToast();
                     totalDescontado.innerHTML = `<p id="total" class="card-text">Debe: $${total -= resultado}</p>`
