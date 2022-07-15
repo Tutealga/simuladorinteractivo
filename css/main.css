@@ -1,4 +1,4 @@
-.card {
+.iCard {
     width: 18rem;
 }
 
@@ -8,4 +8,21 @@ body {
 
 input {
     border:none;
+}
+
+table tr th {
+  cursor: pointer;
+}
+
+.ascendente:after {
+  content: ' ↑';
+}
+
+.descendente:after {
+  content: " ↓";
+}
+
+#pie {
+    font-size: .6875rem;
+    text-align: center
 }
