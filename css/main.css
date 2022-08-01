@@ -1,5 +1,31 @@
-.card {
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 0.75rem;
+}
+
+main.container-fluid{
+  margin: auto;
+}
+
+.noelegido{
+  background: #fff;
+  border:none;
+  border-bottom: 0.0625em solid #eee;
+  width: 100%;
+}
+
+.elegido{
+  background: #f7f7f7;
+  border:none;
+  border-bottom: 0.0625em solid #eee;
+  width: 100%;
+}
+
+.iCard {
     width: 18rem;
+    border-radius: 0.75rem !important;
 }
 
 body {
@@ -8,4 +34,108 @@ body {
 
 input {
     border:none;
+}
+
+table tr th {
+  cursor: pointer;
+}
+
+.ascendente:after {
+  content: ' ↑';
+}
+
+.descendente:after {
+  content: " ↓";
+}
+
+#pie {
+    font-size: .6875rem;
+    text-align: center
+}
+
+.balance {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  background-color: rgb(249 250 251);
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  position: relative;
+}
+
+.balanceDiv {
+  display: flex;
+}
+
+.balanceCard {
+  padding: 1rem;
+  background-color: rgb(255 255 255);
+  border-radius: 0.75rem;
+  width: 14rem;
+  margin: 0 1rem;
+}
+
+.balanceCard h4 {
+  color: rgb(107 114 128);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cardDiv{
+  justify-content: space-between;
+  display: flex;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.cardDiv--Div{
+  flex-direction: column;
+  display: flex;
+}
+
+.cardDiv--Div h3{
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.cardDiv--Img{
+  color: rgb(14 165 233);
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+.cardDiv--Img svg{ 
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: 0.5rem;
+  z-index: 10;
+}
+
+.cardDiv--Img div{ 
+  background-color: rgb(224 242 254);
+  border-radius: 9999px;
+  width: 2rem;
+  height: 2rem;
+  z-index: 0;
+  right: 0px;
+  top: 0.5rem;
+  position: absolute;
+}
+
+.spanDevolves{
+  padding: 1px 6px;
+}
+
+#wrapper{
+  min-height: 100vh !important;
+  padding: 0;
+}
+
+nav{
+  min-height: 100vh;
 }

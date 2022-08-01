@@ -1,121 +1,187 @@
-const DateTime = luxon.DateTime
+let buttons = document.getElementsByClassName("check");
 
-let botonPrestamo = document.querySelector('#boton1')                          
-botonPrestamo.onclick = () => {
-            let usuario1 = document.querySelector("#id1").value;
-            localStorage.setItem('usuario',usuario1);
-            let usuario = localStorage.getItem('usuario');
+let continuar;
 
-            let monto1 = parseInt(document.querySelector("#id2").value);
-            localStorage.setItem('monto',monto1);
-            let monto = parseInt(localStorage.getItem('monto'));
-
-            let cuantasCuotas1 = parseInt(document.querySelector("#id3").value);
-            localStorage.setItem('cuantasCuotas', cuantasCuotas1);
-            let cuantasCuotas = parseInt(localStorage.getItem('cuantasCuotas'));
-
-            const existe = cuotas.find((cuota) => {
-                    return cuota === cuantasCuotas
-                })
-            
-            const nuevoUsuario = new Usuario(usuario, monto, existe)
-            const prestamo = new Prestamo(monto, existe, nuevoUsuario)
-                        
-            prestamo.calcular(monto, existe, nuevoUsuario, prestamo)
+function check(btn){
+    for (let i=0; i < buttons.length; i++){
+        buttons[i].className = "noelegido check"
+        if (i == btn){
+            buttons[btn].className = "elegido check"
         }
-
-let botonNuevoPrestamo = document.querySelector('#boton2')                          
-botonNuevoPrestamo.onclick = () => {
-            localStorage.clear()
-        }
-
-class Prestamo{
-    constructor(monto, cuotas, usuario){
-        this.monto = monto;
-        this.cuotas = cuotas; 
-        this.usuario = usuario;
     }
-    calcular(monto, cuotas, usuario, prestamo){
-        let resultado = (monto + (monto * cuotas * 0.12)) / cuotas
-        let total = monto + (monto * cuotas * 0.12)
-        return prestamo.mostrarInfo(resultado, total, usuario, prestamo)
-    }
-    mostrarInfo(resultado, total, usuario){
-        const fecha = DateTime.now();
-        let usuarioDebe = document.querySelector('.card')
-        usuarioDebe.innerHTML = `<div class="card-body">
-        <h5 class="card-title" style="display:inline">${usuario.nombre}</h5><small style="float:right">${fecha.toLocaleString()}</small>
-                                  <p id="total" class="card-text">Debe: $${total}</p>
-                                  <p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $${resultado}</p>
-                                  <button type="button" id="pagar" class="btn bg-danger">Pagar</button>
-                                  </div>`
-        let boton = document.querySelector('#pagar')                          
-        boton.onclick = () => {
-            while(this.cuotas <= 0){
-                let resultadoFinal = document.querySelector('#cuotas')
-                resultadoFinal.innerHTML = `<p id="cuotas" class="card-text">Cuotas: ${this.cuotas} de $0</p>`
-                Toastify({
-                    text: "Ya no hay cuotas por pagar",
-                    duration: 2000,
-                    gravity: 'bottom',
-                    position: 'center',
-                    style:{
-                        background: 'yellow',
-                        color: 'black'
-                    }
-                 }).showToast();   
-                break
-            }
-            if (this.cuotas > 0 && this.cuotas < 12){
-                let totalDescontado = document.querySelector('#total')
-                let cuotasDescontadas = document.querySelector('#cuotas')
-                Toastify({
-                text: "Confirmar pago de cuota",
-                duration: 1500,
-                gravity: 'bottom',
-                position: 'center',
-                onClick: () => {
-                    Toastify({
-                        text: "Cuota pagada",
-                        duration: 750,
-                        gravity: 'top',
-                        position: 'right',
-                        style:{
-                            background: 'green',
-                        }
-                     }).showToast();
-                    totalDescontado.innerHTML = `<p id="total" class="card-text">Debe: $${total -= resultado}</p>`
-                    cuotasDescontadas.innerHTML = `<p id="cuotas" class="card-text">Cuotas: ${this.cuotas -= 1} de $${resultado}</p>`
-                     },
-                style:{
-                    background: 'red'
-                }
-             }).showToast();
-
-            }}}}
-
-class Usuario{
-    constructor(nombre, prestamos, cuotas){
-        this.nombre = nombre;
-        this.prestamos = prestamos;
-        this.cuotas = cuotas;
-    }}
-    
-let usuario = localStorage.getItem('usuario');
-let monto = parseInt(localStorage.getItem('monto'));
-let cuantasCuotas = parseInt(localStorage.getItem('cuantasCuotas'));
-
-const cuotas = [1,2,3,4,5,6,7,8,9,10,11,12]
-
-const existe = cuotas.find((cuota) => {
-        return cuota === cuantasCuotas
-    })
-
-const nuevoUsuario = new Usuario(usuario, monto, existe)
-const prestamo = new Prestamo(monto, existe, nuevoUsuario)
-
-if(usuario && monto && existe){
-    prestamo.calcular(monto, existe, nuevoUsuario, prestamo)
+    let monto = parseInt(document.querySelector("#id2").value);
+    let devolves = document.querySelector(".devolves");
+    let cuantasCuotas = document.querySelector(".elegido").value;
+    devolves.innerText = totalConIntereses(monto, cuantasCuotas)
 }
 
+const usuarios = (localStorage.getItem('usuarios') === null ) ? [] : JSON.parse(localStorage.getItem('usuarios'));
+
+const DateTime = luxon.DateTime
+const date = DateTime.now()
+
+class Usuarios{
+    constructor(nombre, prestamos){
+        this.nombre = nombre;
+        this.prestamos = prestamos;
+    }
+    obtenerPrestamos(){
+        return this.prestamos
+    }
+    calcularBalance(){
+        const prestamos = this.obtenerPrestamos();
+        const totalPrestamos = calcularTotal(prestamos);
+        return totalPrestamos
+    }
+
+}
+
+class Prestamo{
+    constructor(id, monto, cuotas){
+        this.id = id;
+        this.monto = monto;
+        this.cuotas = cuotas;
+    }}
+
+let usuarioActual = sessionStorage.getItem('usuario');
+
+let ua = obtenerUsuarioActual(usuarioActual)
+
+cargarPrestamos(ua.prestamos);
+calcularTotales();
+
+function totalConIntereses(monto, cuotas){
+    let total = monto + (monto * cuotas * 0.12)
+    return total
+}
+
+function totalEnCuotas(monto, cuotas){
+    let resultado = monto / cuotas
+    return resultado
+}
+
+function existeUsuario(nombre){
+    for(const usuario of usuarios){
+        if(usuario.nombre === nombre ){
+            return true;
+        }
+    }
+    return false;
+}
+
+function obtenerUsuario(nombre){
+    for(const usuario of usuarios){  
+        if (usuario.nombre === nombre){
+            return new Usuarios(usuario.nombre, usuario.prestamos);
+        }
+    }
+    return {};
+}
+
+function obtenerIDUsuario(nombre){
+    for(let i = 0; i < usuarios.length; i++){  
+        if (usuarios[i].nombre === nombre){
+            return i;
+        }
+    }
+    return -1;
+}
+
+function obtenerUsuarioActual(nombre){
+    if (existeUsuario(nombre)){
+        return obtenerUsuario(nombre);
+    } else {
+        const usuarioActual = new Usuarios(nombre, []);
+        usuarios.push(usuarioActual);
+        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        return usuarioActual;
+    } 
+}
+
+function cargarPrestamos(prestamos){
+    for (const prestamo of prestamos) {
+        let cards = document.createElement("div");
+        let {id, monto, cuotas} = prestamo;
+        cards.className = "card iCard";
+        cards.innerHTML = `<div class="card-body">
+        <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
+                                  <p id="total" class="card-text">Debe: $${monto}</p>
+                                  <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
+                                  <button type="button" id="pagar" class="btn bg-danger">Pagar</button>
+                                  </div>`;
+        let divCards = document.querySelector(".divCards");
+        divCards.appendChild(cards);
+    }
+}
+ 
+let botonPrestamo = document.querySelector('#boton1')                          
+botonPrestamo.onclick = () => {
+        validarSeleccionCuotas();
+        if (continuar){
+            let monto = parseInt(document.querySelector("#id2").value);
+            let cuantasCuotas = document.querySelector(".elegido").value;
+            validarPrestamo(monto)
+            if(continuar){
+                ua.prestamos.push(new Prestamo((ua?.prestamos[(ua?.prestamos?.length-1 || 0)]?.id+1 || 1), totalConIntereses(monto, cuantasCuotas), cuantasCuotas));
+                agregarPrestamo();
+                calcularTotales();
+                if(obtenerIDUsuario(usuarioActual) !== -1){
+                    usuarios[obtenerIDUsuario(usuarioActual)] = ua;
+                    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+                }  
+            } 
+        }
+        }
+
+function agregarPrestamo(){
+    const prestamo = ua.prestamos[ua.prestamos.length-1];
+    let cards = document.createElement("div");
+    let {id, monto, cuotas} = prestamo;
+    cards.className = "card";
+    cards.innerHTML = `<div class="card-body">
+    <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
+                              <p id="total" class="card-text">Debe: $${monto}</p>
+                              <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
+                              <button type="button" id="pagar" class="btn bg-danger">Pagar</button>
+                              </div>`;
+    let divCards = document.querySelector(".divCards");
+    divCards.appendChild(cards);
+    
+}
+
+function calcularTotal(prestamos){
+    let total = 0;
+    prestamos.forEach((prestamo) =>{
+        total = total + prestamo.monto;
+    });
+    return total;
+}
+
+function calcularTotales(){
+    let totalPrestamos = document.getElementById("totalPrestamos");
+    let cantidadPrestamos = document.getElementById("cantidadPrestamos");
+    cantidadPrestamos.innerText = ua?.prestamos?.length || 0;
+    const prestamos = (ua?.obtenerPrestamos() || []);
+    totalPrestamos.innerText = calcularTotal(prestamos).toLocaleString("es-AR", {style: "currency",currency: "ARS"});
+    ua.calcularBalance();
+}
+
+
+function validarPrestamo(monto){
+    if((Number.isInteger(monto) && monto !== 0)){
+        continuar = true;
+    } else {
+        alert("Debes ingresar un monto y cuotas correctos")
+        continuar = false;
+    }
+}
+
+function validarSeleccionCuotas(){
+    if (document.querySelector(".elegido")){
+        continuar = true;
+    } else {
+        alert("Debes ingresar un monto y cuotas correctos")
+        continuar = false;
+    }
+}
 
