@@ -54,8 +54,8 @@ table tr th {
 }
 
 .balance {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   background-color: rgb(249 250 251);
   overflow: hidden;
   justify-content: center;
