@@ -37,7 +37,7 @@ function obtenerUsuarioActual(nombre){
 
 let botonIngreso = document.querySelector('#ingreso')                          
 botonIngreso.onclick = () => {
-             let nombre = document.querySelector("#id4").value;
+             let nombre = document.querySelector("#id4").value.toUpperCase();
              obtenerUsuarioActual(nombre)
              sessionStorage.setItem('usuario', nombre)
              window.location.href='prestamos.html'
