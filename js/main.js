@@ -128,9 +128,10 @@ botonPrestamo.onclick = () => {
                 if(obtenerIDUsuario(usuarioActual) !== -1){
                     usuarios[obtenerIDUsuario(usuarioActual)] = ua;
                     localStorage.setItem('usuarios', JSON.stringify(usuarios));
-                }  
-            } 
+                }     
+            }   
         }
+        limpiarModalPrestamos(); 
         }
 
 function agregarPrestamo(){
@@ -185,3 +186,8 @@ function validarSeleccionCuotas(){
     }
 }
 
+function limpiarModalPrestamos(){
+    document.querySelector("#id2").value = "";
+    let cuantasCuotas = document.querySelector(".elegido");
+    cuantasCuotas.className = "noelegido check"
+}
