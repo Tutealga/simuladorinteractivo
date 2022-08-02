@@ -13,104 +13,100 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-danger">
-        <a class="navbar-brand" href="prestamos.html">Logo</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link text-white" href="prestamos.html">Inicio</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="cotizacion.html">Cotización del Dolar</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
-    <div class="container-fluid">
-                <div class="text-center">
-                    <h1 class="fs-2 m-0 title-text">Cotización del dolar</h1> 
-                </div>
-            <div class="container-fluid px-4">
-                <div class="row g-3 my-2">
-                <div class="row my-4">
-                    <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card mt-0 shadow-sm">
-                                            <div class="card-body py-0 px-2">
-                                              <div class="table-responsive">
-                                                <table class="table table-responsive zero-configuration mt-3 rounded text-center normal-color">
-                                                        <thead class="m-auto">
-                                                            <tr>
-                                                                <th>Dolar (USD)</th>
-                                                                <th>Compra</th>
-                                                                <th>Venta</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody class="tabla">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <p id="pie"></p>
-                                            </div>
-                                          </div>
-                                        
-                                    </div>
-                                </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-</div>
- 
-<footer class="text-center text-lg-start bg-danger text-light">
-  <!-- Section: Links  -->
-  <section class="p-1">
-    <div class="container text-center text-md-start mt-5">
-      <!-- Grid row -->
-      <div class="row mt-3">
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-          <!-- Content -->
-          <h6 class="text-uppercase fw-bold mb-4">
-            Proyecto JavaScript  
-          </h6>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam ut illo dolorem sit! Eos, itaque voluptas delectus omnis maxime quis at consequatur officiis.
-          </p>
-        </div>
-        <!-- Grid column -->
-        <!-- Grid column -->
-        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">
-            Contacto
-          </h6>
-          <p><i class="fas fa-home me-3"></i> Buenos Aires, Argentina</p>
-          <p>
-            <i class="fas fa-envelope me-3"></i> info@example.com
-          </p>
-          <p><i class="fas fa-phone me-3"></i>  +54 156846 3278</p>
-        </div>
-        <!-- Grid column -->
+  <main class="container-fluid"> 
+    <div class="row">
+      <div id="wrapper" class="col-2">
+        <nav class="navbar navbar-expand-lg flex-column navbar-light bg-danger">
+          <a class="navbar-brand" href="prestamos.html">Logo</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav flex-column mr-auto">
+              <li class="nav-item">
+                <a class="nav-link text-white" href="prestamos.html">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="cotizacion.html">Cotización del Dolar</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
       </div>
-      <!-- Grid row -->
-    </div>
-  </section>
-  <!-- Section: Links  -->
+      <div class="col-10">
+        <div class="container-fluid">
+          <div class="text-center">
+              <h1 class="fs-2 m-0 title-text">Cotización del dolar</h1> 
+          </div>
+      <div class="container-fluid px-4">
+          <div class="row g-3 my-2">
+          <div class="row my-4">
+              <div class="col">
+                          <div class="row">
+                              <div class="col">
+                                  <div class="card mt-0 shadow-sm">
+                                      <div class="card-body py-0 px-2">
+                                        <div class="table-responsive">
+                                          <table class="table table-responsive zero-configuration mt-3 rounded text-center normal-color">
+                                                  <thead class="m-auto">
+                                                      <tr>
+                                                          <th>Dolar (USD)</th>
+                                                          <th>Compra</th>
+                                                          <th>Venta</th>
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody class="tabla">
+                                                  </tbody>
+                                              </table>
+                                          </div>
+                                          <p id="pie"></p>
+                                      </div>
+                                    </div>
+                                  
+                              </div>
+                          </div>
+              </div>
+          </div>
 
-  <!-- Copyright -->
-  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-    © 2022 Copyright:
-    <a class="text-reset fw-bold" href="#">proyectojavascript.com</a>
+      </div>
   </div>
-  <!-- Copyright -->
-</footer>
+</div>
+      </div>
+    </div>
+    <div class="row">
+      <footer class="text-center col-12 text-lg-start bg-danger text-light">
+        <section class="p-1">
+          <div class="container text-center text-md-start mt-5">
+            <div class="row mt-3">
+              <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                <h6 class="text-uppercase fw-bold mb-4">
+                  Proyecto JavaScript 
+                </h6>
+                <p>
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam ut illo dolorem sit! Eos, itaque voluptas delectus omnis maxime quis at consequatur officiis.
+                </p>
+              </div>
+              <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                <h6 class="text-uppercase fw-bold mb-4">
+                  Contacto
+                </h6>
+                <p><i class="fas fa-home me-3"></i> Buenos Aires, Argentina</p>
+                <p>
+                  <i class="fas fa-envelope me-3"></i> info@example.com
+                </p>
+                <p><i class="fas fa-phone me-3"></i>  +54 156846 3278</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+          © 2022 Copyright:
+          <a class="text-reset fw-bold" href="#">proyectojavascript.com</a>
+        </div>
+      </footer>
+    </div>
+  </main>
+
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="js/cotizacion.js"></script>
 </body>
