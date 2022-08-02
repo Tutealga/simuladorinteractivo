@@ -131,11 +131,64 @@ table tr th {
   padding: 1px 6px;
 }
 
-#wrapper{
-  min-height: 100vh !important;
-  padding: 0;
+/*---------- CONFIGURACIÓN DEL WRAPPER -----------*/
+#wrapper {
+  overflow-x: hidden;
+  background-image: linear-gradient(
+  to bottom,
+  #f5f7f4,
+  #ebebe8,
+  #e3e3e0
+  ) 
 }
 
-nav{
+/*---------- CONFIGURACIÓN DEL SIDEBAR -----------*/
+#sidebar-wrapper {
   min-height: 100vh;
+  -webkit-transition: margin 0.25s ease-out;
+  -moz-transition: margin 0.25s ease-out;
+  -o-transition: margin 0.25s ease-out;
+  transition: margin 0.25s ease-out;
 }
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 15rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+#menu-toggle {
+  cursor: pointer;
+}
+.logout-item{
+  display: block;
+}
+
+.list-group-item {
+  border: none;
+  padding: 20px 30px;
+}
+
+.list-group-item.active {
+  background-color: transparent;
+  color: var(--main-text-color);
+  font-weight: bold;
+  border: none;
+}
+
+.nav-pills .nav-item .nav-link:hover{
+  color: var(--hover-text-color) !important;
+
+}
+
+.item-active{
+  background-color: var(--hover-bg-color) !important;
+}
+
