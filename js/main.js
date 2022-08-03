@@ -114,7 +114,7 @@ function cargarPrestamos(prestamos){
                 cards.className = "card iCard";
                 cards.innerHTML = `<div class="card-body">
                 <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
-                                          <p id="total" class="card-text">Debe: $${monto}</p>
+                                          <p id="total" class="card-text">Debe: $${Math.floor(monto)}</p>
                                           <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
                                           <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar</button>
                                           </div>`;
@@ -150,7 +150,7 @@ function agregarPrestamo(){
     cards.className = "card iCard";
     cards.innerHTML = `<div class="card-body">
     <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
-                              <p id="total" class="card-text">Debe: $${monto}</p>
+                              <p id="total" class="card-text">Debe: $${Math.floor(monto)}</p>
                               <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
                               <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar</button>
                               </div>`;
@@ -172,7 +172,7 @@ function calcularTotales(){
     let cantidadPrestamos = document.getElementById("cantidadPrestamos");
     cantidadPrestamos.innerText = ua?.prestamos?.length || 0;
     const prestamos = (ua?.obtenerPrestamos() || []);
-    totalPrestamos.innerText = calcularTotal(prestamos).toLocaleString("es-AR", {style: "currency",currency: "ARS"});
+    totalPrestamos.innerText = Math.floor(calcularTotal(prestamos)).toLocaleString("es-AR", {style: "currency",currency: "ARS"});
     ua.calcularBalance();
 }
 
@@ -213,7 +213,7 @@ function actualizarPrestamos(){
 function pagarCuota(id){
     id = id-1
     const prestamo = new Prestamo(ua?.prestamos[id]?.id, ua?.prestamos[id]?.monto, ua?.prestamos[id]?.cuotas);
-    if(prestamo.cuotas > 0 && prestamo.monto > 0){ 
+    if(prestamo.monto > 0 && prestamo.cuotas > 0){
             Swal.fire({
                     title: 'Pago de cuotas',
                     text: "¿Confirmar pago de cuota?",
@@ -234,20 +234,20 @@ function pagarCuota(id){
                            usuarios[obtenerIDUsuario(usuarioActual)] = ua;
                            localStorage.setItem('usuarios', JSON.stringify(usuarios));
                        }
+                       if(prestamo.cuotas <= 0 && prestamo.monto <= 0){
+                        ua.prestamos.splice(id,1);
+                        actualizarPrestamos();     
+                        calcularTotales();
+                        if(obtenerIDUsuario(usuarioActual) !== -1){
+                            usuarios[obtenerIDUsuario(usuarioActual)] = ua;
+                            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+                        }
                         Swal.fire({
                             title: 'Cuota pagada',
                     icon: 'success',
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: "#198754",
                         }).then(() => {
-                            if(prestamo.cuotas <= 0 && prestamo.monto <= 0){
-                                ua.prestamos.splice(id,1);
-                                actualizarPrestamos();     
-                                calcularTotales();
-                                if(obtenerIDUsuario(usuarioActual) !== -1){
-                                    usuarios[obtenerIDUsuario(usuarioActual)] = ua;
-                                    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-                                } 
                                 Swal.fire({
                                     title: 'Pago de cuotas',
                                     text: 'Ya no hay cuotas por pagar',
@@ -256,18 +256,21 @@ function pagarCuota(id){
                                     confirmButtonText: 'Aceptar',
                                 }).then(()=>{
                                     window.location.reload()
-                                })
-                            }else{
-                                window.location.reload()
-                            }
-                            
+                                }) 
                         })
-                        
-                     }
-                    
-                    })
-    
-                    } 
+                    }else{
+                        Swal.fire({
+                            title: 'Cuota pagada',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: "#198754",
+                        }).then(()=>{
+                            window.location.reload()
+                        }) 
+                    }
+                }
+            })
+        }
     }
     
         
