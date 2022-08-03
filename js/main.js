@@ -222,6 +222,7 @@ function pagarCuota(id){
             usuarios[obtenerIDUsuario(usuarioActual)] = ua;
             localStorage.setItem('usuarios', JSON.stringify(usuarios));
         } 
+        window.location.reload()
         Toastify({
             text: "Ya no hay cuotas por pagar",
             duration: 2000,
@@ -231,7 +232,7 @@ function pagarCuota(id){
                 background: 'yellow',
                 color: 'black'
             }
-         }).showToast();   
+         }).showToast(); 
         break
     }
     if(prestamo.cuotas > 0 && prestamo.monto > 0){
@@ -258,6 +259,7 @@ function pagarCuota(id){
                         usuarios[obtenerIDUsuario(usuarioActual)] = ua;
                         localStorage.setItem('usuarios', JSON.stringify(usuarios));
                     }  
+                    window.location.reload()
                      },
                 style:{
                     background: 'red'
