@@ -41,7 +41,16 @@ class Prestamo{
         this.id = id;
         this.monto = monto;
         this.cuotas = cuotas;
-    }}
+    }
+setMonto(monto){
+    this.monto = monto;
+}
+setCuotas(cuotas){
+    this.cuotas = cuotas;
+}
+
+
+}
 
 let usuarioActual = sessionStorage.getItem('usuario');
 
@@ -107,7 +116,7 @@ function cargarPrestamos(prestamos){
         <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
                                   <p id="total" class="card-text">Debe: $${monto}</p>
                                   <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
-                                  <button type="button" id="pagar" class="btn bg-danger">Pagar</button>
+                                  <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar</button>
                                   </div>`;
         let divCards = document.querySelector(".divCards");
         divCards.appendChild(cards);
@@ -138,12 +147,12 @@ function agregarPrestamo(){
     const prestamo = ua.prestamos[ua.prestamos.length-1];
     let cards = document.createElement("div");
     let {id, monto, cuotas} = prestamo;
-    cards.className = "card";
+    cards.className = "card iCard";
     cards.innerHTML = `<div class="card-body">
     <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
                               <p id="total" class="card-text">Debe: $${monto}</p>
                               <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
-                              <button type="button" id="pagar" class="btn bg-danger">Pagar</button>
+                              <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar</button>
                               </div>`;
     let divCards = document.querySelector(".divCards");
     divCards.appendChild(cards);
@@ -191,3 +200,73 @@ function limpiarModalPrestamos(){
     let cuantasCuotas = document.querySelector(".elegido");
     cuantasCuotas.className = "noelegido check"
 }
+
+function actualizarPrestamos(){
+
+    for(let i=0; i < ua.prestamos.length; i++){
+        if (ua.prestamos[i].id !== (i+1)){
+            ua.prestamos[i].id = i+1;
+        }
+    }
+
+}
+                        
+function pagarCuota(id){
+    id = id-1
+    const prestamo = new Prestamo(ua?.prestamos[id]?.id, ua?.prestamos[id]?.monto, ua?.prestamos[id]?.cuotas);
+    while(prestamo.cuotas <= 0 && prestamo.monto <= 0){
+        ua.prestamos.splice(id,1);
+        actualizarPrestamos();     
+        calcularTotales();
+        if(obtenerIDUsuario(usuarioActual) !== -1){
+            usuarios[obtenerIDUsuario(usuarioActual)] = ua;
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        } 
+        Toastify({
+            text: "Ya no hay cuotas por pagar",
+            duration: 2000,
+            gravity: 'bottom',
+            position: 'center',
+            style:{
+                background: 'yellow',
+                color: 'black'
+            }
+         }).showToast();   
+        break
+    }
+    if(prestamo.cuotas > 0 && prestamo.monto > 0){
+        Toastify({
+                text: "Confirmar pago de cuota",
+                duration: 1500,
+                gravity: 'bottom',
+                position: 'center',
+                onClick: () => {
+                    Toastify({
+                        text: "Cuota pagada",
+                        duration: 750,
+                        gravity: 'top',
+                        position: 'right',
+                        style:{
+                            background: 'green',
+                        }
+                     }).showToast();
+                     prestamo.setMonto(prestamo.monto - totalEnCuotas(prestamo.monto, prestamo.cuotas));
+                     prestamo.setCuotas(prestamo.cuotas - 1);
+                     ua.prestamos[id] = prestamo
+                     calcularTotales();
+                     if(obtenerIDUsuario(usuarioActual) !== -1){
+                        usuarios[obtenerIDUsuario(usuarioActual)] = ua;
+                        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+                    }  
+                     },
+                style:{
+                    background: 'red'
+                }
+             }).showToast();
+        
+    }
+        }
+
+
+
+
