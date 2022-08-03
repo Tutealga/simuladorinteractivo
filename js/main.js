@@ -109,17 +109,17 @@ function obtenerUsuarioActual(nombre){
 
 function cargarPrestamos(prestamos){
     for (const prestamo of prestamos) {
-        let cards = document.createElement("div");
-        let {id, monto, cuotas} = prestamo;
-        cards.className = "card iCard";
-        cards.innerHTML = `<div class="card-body">
-        <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
-                                  <p id="total" class="card-text">Debe: $${monto}</p>
-                                  <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
-                                  <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar</button>
-                                  </div>`;
-        let divCards = document.querySelector(".divCards");
-        divCards.appendChild(cards);
+            let cards = document.createElement("div");
+            let {id, monto, cuotas} = prestamo;
+                cards.className = "card iCard";
+                cards.innerHTML = `<div class="card-body">
+                <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
+                                          <p id="total" class="card-text">Debe: $${monto}</p>
+                                          <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
+                                          <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar</button>
+                                          </div>`;
+                let divCards = document.querySelector(".divCards");
+                divCards.appendChild(cards);
     }
 }
  
@@ -202,7 +202,6 @@ function limpiarModalPrestamos(){
 }
 
 function actualizarPrestamos(){
-
     for(let i=0; i < ua.prestamos.length; i++){
         if (ua.prestamos[i].id !== (i+1)){
             ua.prestamos[i].id = i+1;
@@ -214,60 +213,65 @@ function actualizarPrestamos(){
 function pagarCuota(id){
     id = id-1
     const prestamo = new Prestamo(ua?.prestamos[id]?.id, ua?.prestamos[id]?.monto, ua?.prestamos[id]?.cuotas);
-    while(prestamo.cuotas <= 0 && prestamo.monto <= 0){
-        ua.prestamos.splice(id,1);
-        actualizarPrestamos();     
-        calcularTotales();
-        if(obtenerIDUsuario(usuarioActual) !== -1){
-            usuarios[obtenerIDUsuario(usuarioActual)] = ua;
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
-        } 
-        window.location.reload()
-        Toastify({
-            text: "Ya no hay cuotas por pagar",
-            duration: 2000,
-            gravity: 'bottom',
-            position: 'center',
-            style:{
-                background: 'yellow',
-                color: 'black'
-            }
-         }).showToast(); 
-        break
+    if(prestamo.cuotas > 0 && prestamo.monto > 0){ 
+            Swal.fire({
+                    title: 'Pago de cuotas',
+                    text: "¿Confirmar pago de cuota?",
+                    icon: 'warning',
+                    closeOnClickOutside: true,
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Confirmar',
+                    confirmButtonColor: "#198754",
+                    cancelButtonColor: "#dc3545",
+                     }).then((result) =>{
+                     if(result.isConfirmed){
+                        prestamo.setMonto(prestamo.monto - totalEnCuotas(prestamo.monto, prestamo.cuotas));
+                        prestamo.setCuotas(prestamo.cuotas - 1);
+                        ua.prestamos[id] = prestamo
+                        calcularTotales();
+                        if(obtenerIDUsuario(usuarioActual) !== -1){
+                           usuarios[obtenerIDUsuario(usuarioActual)] = ua;
+                           localStorage.setItem('usuarios', JSON.stringify(usuarios));
+                       }
+                        Swal.fire({
+                            title: 'Cuota pagada',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: "#198754",
+                        }).then(() => {
+                            if(prestamo.cuotas <= 0 && prestamo.monto <= 0){
+                                ua.prestamos.splice(id,1);
+                                actualizarPrestamos();     
+                                calcularTotales();
+                                if(obtenerIDUsuario(usuarioActual) !== -1){
+                                    usuarios[obtenerIDUsuario(usuarioActual)] = ua;
+                                    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+                                } 
+                                Swal.fire({
+                                    title: 'Pago de cuotas',
+                                    text: 'Ya no hay cuotas por pagar',
+                                    icon: 'error',
+                                    confirmButtonColor: "#198754",
+                                    confirmButtonText: 'Aceptar',
+                                }).then(()=>{
+                                    window.location.reload()
+                                })
+                            }else{
+                                window.location.reload()
+                            }
+                            
+                        })
+                        
+                     }
+                    
+                    })
+    
+                    } 
     }
-    if(prestamo.cuotas > 0 && prestamo.monto > 0){
-        Toastify({
-                text: "Confirmar pago de cuota",
-                duration: 1500,
-                gravity: 'bottom',
-                position: 'center',
-                onClick: () => {
-                    Toastify({
-                        text: "Cuota pagada",
-                        duration: 750,
-                        gravity: 'top',
-                        position: 'right',
-                        style:{
-                            background: 'green',
-                        }
-                     }).showToast();
-                     prestamo.setMonto(prestamo.monto - totalEnCuotas(prestamo.monto, prestamo.cuotas));
-                     prestamo.setCuotas(prestamo.cuotas - 1);
-                     ua.prestamos[id] = prestamo
-                     calcularTotales();
-                     if(obtenerIDUsuario(usuarioActual) !== -1){
-                        usuarios[obtenerIDUsuario(usuarioActual)] = ua;
-                        localStorage.setItem('usuarios', JSON.stringify(usuarios));
-                    }  
-                    window.location.reload()
-                     },
-                style:{
-                    background: 'red'
-                }
-             }).showToast();
+    
         
-    }
-        }
+      
 
 
 
