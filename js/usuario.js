@@ -1,11 +1,13 @@
 const usuarios = (localStorage.getItem('usuarios') === null ) ? [] : JSON.parse(localStorage.getItem('usuarios'));
 
+//Clase usuarios
 class Usuarios{
     constructor(nombre, prestamos){
         this.nombre = nombre;
         this.prestamos = prestamos;
     }}
 
+//Verifico si existe el usuario
 function existeUsuario(nombre){
     for(const usuario of usuarios){
         if(usuario.nombre === nombre ){
@@ -15,6 +17,7 @@ function existeUsuario(nombre){
     return false;
 }
 
+//Obtengo el usuario
 function obtenerUsuario(nombre){
     for(const usuario of usuarios){  
         if (usuario.nombre === nombre){
@@ -24,6 +27,7 @@ function obtenerUsuario(nombre){
     return {};
 }
 
+//Si el usuario existe lo devuelvo, sino creo uno nuevo
 function obtenerUsuarioActual(nombre){
     if (existeUsuario(nombre)){
         return obtenerUsuario(nombre);
@@ -35,6 +39,7 @@ function obtenerUsuarioActual(nombre){
     } 
 }
 
+//Obtengo el usuario ingresado por el dom
 let botonIngreso = document.querySelector('#ingreso')                          
 botonIngreso.onclick = () => {
              let nombre = document.querySelector("#id4").value.toUpperCase();
