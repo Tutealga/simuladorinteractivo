@@ -54,6 +54,7 @@ setCuotas(cuotas){
 let usuarioActual = sessionStorage.getItem('usuario');
 let ua = obtenerUsuarioActual(usuarioActual)
 
+//Cargar prestamos y calcular totales
 cargarPrestamos(ua.prestamos);
 calcularTotales();
 
@@ -68,7 +69,6 @@ function totalEnCuotas(monto, cuotas){
     let resultado = monto / cuotas
     return resultado
 }
-
 
 //Verifico que exista el usuario
 function existeUsuario(nombre){
@@ -90,6 +90,7 @@ function obtenerUsuario(nombre){
     return {};
 }
 
+//Obtengo el id del usuario
 function obtenerIDUsuario(nombre){
     for(let i = 0; i < usuarios.length; i++){  
         if (usuarios[i].nombre === nombre){
@@ -98,7 +99,6 @@ function obtenerIDUsuario(nombre){
     }
     return -1;
 }
-
 
 //Si el usuario ingresado existe lo retorno, sino creo uno nuevo
 function obtenerUsuarioActual(nombre){
@@ -175,7 +175,6 @@ function calcularTotal(prestamos){
     });
     return total;
 }
-
 
 //Mostrar el balance total de los prestamos y cuantos son
 function calcularTotales(){
