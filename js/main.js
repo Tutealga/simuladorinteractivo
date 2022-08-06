@@ -1,7 +1,7 @@
-let buttons = document.getElementsByClassName("check");
-
 let continuar;
 
+//Obtengo el boton de cuotas seleccionado
+let buttons = document.getElementsByClassName("check");
 function check(btn){
     for (let i=0; i < buttons.length; i++){
         buttons[i].className = "noelegido check"
@@ -16,10 +16,10 @@ function check(btn){
 }
 
 const usuarios = (localStorage.getItem('usuarios') === null ) ? [] : JSON.parse(localStorage.getItem('usuarios'));
-
 const DateTime = luxon.DateTime
 const date = DateTime.now()
 
+//Clase usuarios
 class Usuarios{
     constructor(nombre, prestamos){
         this.nombre = nombre;
@@ -33,9 +33,9 @@ class Usuarios{
         const totalPrestamos = calcularTotal(prestamos);
         return totalPrestamos
     }
-
 }
 
+//Clase prestamos
 class Prestamo{
     constructor(id, monto, cuotas){
         this.id = id;
@@ -48,27 +48,29 @@ setMonto(monto){
 setCuotas(cuotas){
     this.cuotas = cuotas;
 }
-
-
 }
 
+//Obtengo el usuario actual
 let usuarioActual = sessionStorage.getItem('usuario');
-
 let ua = obtenerUsuarioActual(usuarioActual)
 
 cargarPrestamos(ua.prestamos);
 calcularTotales();
 
+//Calcular el total con intereses a abonar
 function totalConIntereses(monto, cuotas){
     let total = monto + (monto * cuotas * 0.12)
     return total
 }
 
+//Calcular cuanto es por cuota
 function totalEnCuotas(monto, cuotas){
     let resultado = monto / cuotas
     return resultado
 }
 
+
+//Verifico que exista el usuario
 function existeUsuario(nombre){
     for(const usuario of usuarios){
         if(usuario.nombre === nombre ){
@@ -78,6 +80,7 @@ function existeUsuario(nombre){
     return false;
 }
 
+//Obtengo el usuario
 function obtenerUsuario(nombre){
     for(const usuario of usuarios){  
         if (usuario.nombre === nombre){
@@ -96,6 +99,8 @@ function obtenerIDUsuario(nombre){
     return -1;
 }
 
+
+//Si el usuario ingresado existe lo retorno, sino creo uno nuevo
 function obtenerUsuarioActual(nombre){
     if (existeUsuario(nombre)){
         return obtenerUsuario(nombre);
@@ -107,6 +112,7 @@ function obtenerUsuarioActual(nombre){
     } 
 }
 
+//Cargo los prestamos registrados en el LocalStorage
 function cargarPrestamos(prestamos){
     for (const prestamo of prestamos) {
             let cards = document.createElement("div");
@@ -123,6 +129,7 @@ function cargarPrestamos(prestamos){
     }
 }
  
+//Al dar el boton se carga el nuevo prestamo
 let botonPrestamo = document.querySelector('#boton1')                          
 botonPrestamo.onclick = () => {
         validarSeleccionCuotas();
@@ -143,6 +150,7 @@ botonPrestamo.onclick = () => {
         limpiarModalPrestamos(); 
         }
 
+//Agregar el nuevo prestamo
 function agregarPrestamo(){
     const prestamo = ua.prestamos[ua.prestamos.length-1];
     let cards = document.createElement("div");
@@ -159,6 +167,7 @@ function agregarPrestamo(){
     
 }
 
+//Calcular el balance total de los prestamos
 function calcularTotal(prestamos){
     let total = 0;
     prestamos.forEach((prestamo) =>{
@@ -167,6 +176,8 @@ function calcularTotal(prestamos){
     return total;
 }
 
+
+//Mostrar el balance total de los prestamos y cuantos son
 function calcularTotales(){
     let totalPrestamos = document.getElementById("totalPrestamos");
     let cantidadPrestamos = document.getElementById("cantidadPrestamos");
@@ -176,7 +187,7 @@ function calcularTotales(){
     ua.calcularBalance();
 }
 
-
+//Verificar que se haya ingresado el monto
 function validarPrestamo(monto){
     if((Number.isInteger(monto) && monto !== 0)){
         continuar = true;
@@ -186,6 +197,7 @@ function validarPrestamo(monto){
     }
 }
 
+//Verificar que se haya seleccionado las cuotas
 function validarSeleccionCuotas(){
     if (document.querySelector(".elegido")){
         continuar = true;
@@ -195,21 +207,23 @@ function validarSeleccionCuotas(){
     }
 }
 
+//Al confirmar el nuevo prestamo limpiar el modal
 function limpiarModalPrestamos(){
     document.querySelector("#id2").value = "";
     let cuantasCuotas = document.querySelector(".elegido");
     cuantasCuotas.className = "noelegido check"
 }
 
+//Al un prestamo quedar en 0 y ser eliminado actualizo el indice de los demas prestamos
 function actualizarPrestamos(){
     for(let i=0; i < ua.prestamos.length; i++){
         if (ua.prestamos[i].id !== (i+1)){
             ua.prestamos[i].id = i+1;
         }
     }
-
 }
-                        
+
+//Funcion para el pago de cuotas
 function pagarCuota(id){
     id = id-1
     const prestamo = new Prestamo(ua?.prestamos[id]?.id, ua?.prestamos[id]?.monto, ua?.prestamos[id]?.cuotas);
