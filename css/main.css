@@ -9,6 +9,10 @@ main.container-fluid{
   margin: auto;
 }
 
+.card-text-m0{
+  margin-bottom: 0px;
+}
+
 .noelegido{
   background: #fff;
   border:none;
@@ -23,9 +27,14 @@ main.container-fluid{
   width: 100%;
 }
 
-.iCard {
-    width: 18rem;
+.pCard {
+    max-width: 100%;
     border-radius: 0.75rem !important;
+}
+
+.aCard {
+  width: 100%;
+  border-radius: 0.75rem !important;
 }
 
 body {
@@ -127,13 +136,21 @@ table tr th {
   position: absolute;
 }
 
+.cardDiv--Img .divActividad{ 
+  background-color: rgb(224 242 254);
+  border-radius: 9999px;
+  width: 2rem;
+  height: 2rem;
+  z-index: 0;
+  right: 10px;
+  position: absolute;
+}
+
 .spanDevolves{
   padding: 1px 6px;
 }
 
-/*---------- CONFIGURACIÓN DEL WRAPPER -----------*/
 #wrapper {
-  overflow-x: hidden;
   background-image: linear-gradient(
   to bottom,
   #f5f7f4,
@@ -142,12 +159,8 @@ table tr th {
   ) 
 }
 
-/*---------- CONFIGURACIÓN DEL SIDEBAR -----------*/
 #sidebar-wrapper {
   min-height: 100vh;
-  -webkit-transition: margin 0.25s ease-out;
-  -moz-transition: margin 0.25s ease-out;
-  -o-transition: margin 0.25s ease-out;
   transition: margin 0.25s ease-out;
 }
 
@@ -156,17 +169,18 @@ table tr th {
   font-size: 1.2rem;
 }
 
+.cbp{
+  padding: 12px .5em 12px 16px !important;
+}
+
 #sidebar-wrapper .list-group {
   width: 15rem;
 }
 
 #page-content-wrapper {
-  min-width: 100vw;
+  width: 100%;
 }
 
-#menu-toggle {
-  cursor: pointer;
-}
 .logout-item{
   display: block;
 }

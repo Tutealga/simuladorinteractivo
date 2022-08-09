@@ -5,45 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de prestamos - Algañaras Mateo</title>
+    <!-- header -->
+    <script defer src="js/header/headerHTML.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.0/build/global/luxon.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
+
 <body>
   <div class="d-flex" id="wrapper">
-    <div class="bg-danger text-light" id="sidebar-wrapper">
-      <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom font-title">Prestamos</div>
-        <div class="list-group list-group-flush my-3">
-          <a href="index.html" class="text-light list-group-item list-group-item-action bg-transparent second-text"><i
-            class="fa fa-house mr-2"></i>Inicio</a>
-            <a href="prestamos.html" class="text-light list-group-item list-group-item-action bg-transparent second-text"><i
-                class="fa fa-vault mr-2"></i>Prestamos</a>
-            <a href="cotizacion.html" class="text-light list-group-item list-group-item-action bg-transparent second-text"><i
-                class="fas fa-dollar-sign mr-2"></i>Cotización Dolar</a>
-        </div>
-        
-    </div>
+    <header></header>
+    
     <div id="page-content-wrapper">
         <div class="container-fluid px-4">
             <div class="row my-4">
                 <div class="col">
                   <h1 style="margin-top:2rem; text-align: center;">Ingreso</h1>
-
                           <div class="d-flex container flex-column justify-content-center">
                           <label for="id1">Indica tu nombre:</label><input type="text" id="id4">
                           <div style="margin-top:1rem" class="d-flex justify-content-start">
-                            <button class="btn bg-danger" id="ingreso">Ingresar</button> 
+                            <button class="btn bg-danger text-light" id="ingreso">Ingresar</button> 
                           </div>
                           </div>
                 </div>
             </div>
-
         </div>
     </div>
-</div>         
+</div>        
+
 <script src="js/usuario.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 </html>

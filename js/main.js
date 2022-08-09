@@ -21,9 +21,10 @@ const date = DateTime.now()
 
 //Clase usuarios
 class Usuarios{
-    constructor(nombre, prestamos){
+    constructor(nombre, prestamos, actividades){
         this.nombre = nombre;
         this.prestamos = prestamos;
+        this.actividades = actividades;
     }
     obtenerPrestamos(){
         return this.prestamos
@@ -54,8 +55,9 @@ setCuotas(cuotas){
 let usuarioActual = sessionStorage.getItem('usuario');
 let ua = obtenerUsuarioActual(usuarioActual)
 
-//Cargar prestamos y calcular totales
+//Cargar prestamos/actividades y calcular totales
 cargarPrestamos(ua.prestamos);
+cargarActividad(ua.actividades);
 calcularTotales();
 
 //Calcular el total con intereses a abonar
@@ -84,7 +86,7 @@ function existeUsuario(nombre){
 function obtenerUsuario(nombre){
     for(const usuario of usuarios){  
         if (usuario.nombre === nombre){
-            return new Usuarios(usuario.nombre, usuario.prestamos);
+            return new Usuarios(usuario.nombre, usuario.prestamos, usuario.actividades);
         }
     }
     return {};
@@ -105,27 +107,39 @@ function obtenerUsuarioActual(nombre){
     if (existeUsuario(nombre)){
         return obtenerUsuario(nombre);
     } else {
-        const usuarioActual = new Usuarios(nombre, []);
+        const usuarioActual = new Usuarios(nombre, [], []);
         usuarios.push(usuarioActual);
         localStorage.setItem('usuarios', JSON.stringify(usuarios));
         return usuarioActual;
     } 
 }
 
+//Para cargar y crear los prestamos en el DOM
+function prestamosInner(prestamo){
+    let cards = document.createElement("div");
+    let {id, monto, cuotas} = prestamo;
+    cards.className = "card pCard";
+    cards.innerHTML = `<div class="card-body">
+                       <h5 class="card-title" style="display:inline">Prestamo ${id}</h5>
+                       <p id="total" class="card-text">Debes: $${Math.floor(monto)}</p>
+                       <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
+                       <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar cuota</button>
+                       </div>`;
+    let divCards = document.querySelector(".divCards");
+    divCards.appendChild(cards);
+}
+
 //Cargo los prestamos registrados en el LocalStorage
 function cargarPrestamos(prestamos){
     for (const prestamo of prestamos) {
-            let cards = document.createElement("div");
-            let {id, monto, cuotas} = prestamo;
-                cards.className = "card iCard";
-                cards.innerHTML = `<div class="card-body">
-                <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
-                                          <p id="total" class="card-text">Debe: $${Math.floor(monto)}</p>
-                                          <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
-                                          <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar</button>
-                                          </div>`;
-                let divCards = document.querySelector(".divCards");
-                divCards.appendChild(cards);
+            prestamosInner(prestamo);
+    }
+}
+
+//Cargo la actividad del LocalStorage
+function cargarActividad(actividades){
+    for (const actividad of actividades) {
+            actividadesInner(actividad);
     }
 }
  
@@ -141,10 +155,7 @@ botonPrestamo.onclick = () => {
                 ua.prestamos.push(new Prestamo((ua?.prestamos[(ua?.prestamos?.length-1 || 0)]?.id+1 || 1), totalConIntereses(monto, cuantasCuotas), cuantasCuotas));
                 agregarPrestamo();
                 calcularTotales();
-                if(obtenerIDUsuario(usuarioActual) !== -1){
-                    usuarios[obtenerIDUsuario(usuarioActual)] = ua;
-                    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-                }     
+                actualizarUsuario(); 
             }   
         }
         limpiarModalPrestamos(); 
@@ -153,18 +164,7 @@ botonPrestamo.onclick = () => {
 //Agregar el nuevo prestamo
 function agregarPrestamo(){
     const prestamo = ua.prestamos[ua.prestamos.length-1];
-    let cards = document.createElement("div");
-    let {id, monto, cuotas} = prestamo;
-    cards.className = "card iCard";
-    cards.innerHTML = `<div class="card-body">
-    <h5 class="card-title" style="display:inline">${id}</h5><small style="float:right">${date.toLocaleString()}</small>
-                              <p id="total" class="card-text">Debe: $${Math.floor(monto)}</p>
-                              <p id="cuotas" class="card-text">Cuotas: ${cuotas} de $${Math.floor(totalEnCuotas(monto, cuotas))}</p>
-                              <button type="button" onclick="pagarCuota(${id})" class="btn text-light bg-danger">Pagar</button>
-                              </div>`;
-    let divCards = document.querySelector(".divCards");
-    divCards.appendChild(cards);
-    
+    prestamosInner(prestamo);
 }
 
 //Calcular el balance total de los prestamos
@@ -239,38 +239,26 @@ function pagarCuota(id){
                     cancelButtonColor: "#dc3545",
                      }).then((result) =>{
                      if(result.isConfirmed){
+                        agregarActividad(id+1, totalEnCuotas(prestamo.monto, prestamo.cuotas), date.toLocaleString({ month: 'long', day: 'numeric' }));
                         prestamo.setMonto(prestamo.monto - totalEnCuotas(prestamo.monto, prestamo.cuotas));
                         prestamo.setCuotas(prestamo.cuotas - 1);
                         ua.prestamos[id] = prestamo
+                        actualizarUsuario();
                         calcularTotales();
-                        if(obtenerIDUsuario(usuarioActual) !== -1){
-                           usuarios[obtenerIDUsuario(usuarioActual)] = ua;
-                           localStorage.setItem('usuarios', JSON.stringify(usuarios));
-                       }
                        if(prestamo.cuotas <= 0 && prestamo.monto <= 0){
                         ua.prestamos.splice(id,1);
-                        actualizarPrestamos();     
+                        actualizarPrestamos();
+                        actualizarUsuario();     
                         calcularTotales();
-                        if(obtenerIDUsuario(usuarioActual) !== -1){
-                            usuarios[obtenerIDUsuario(usuarioActual)] = ua;
-                            localStorage.setItem('usuarios', JSON.stringify(usuarios));
-                        }
                         Swal.fire({
-                            title: 'Cuota pagada',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: "#198754",
-                        }).then(() => {
-                                Swal.fire({
-                                    title: 'Pago de cuotas',
-                                    text: 'Ya no hay cuotas por pagar',
-                                    icon: 'error',
+                                    title: 'Cuota pagada',
+                                    text: '¡Ya no hay cuotas por pagar!',
+                                    icon: 'success',
                                     confirmButtonColor: "#198754",
                                     confirmButtonText: 'Aceptar',
                                 }).then(()=>{
                                     window.location.reload()
                                 }) 
-                        })
                     }else{
                         Swal.fire({
                             title: 'Cuota pagada',
@@ -285,6 +273,42 @@ function pagarCuota(id){
             })
         }
     }
+
+function agregarActividad(id, monto, fecha){
+    const actividad = {prestamo: id, monto: monto, fecha: fecha}
+    ua.actividades.push(actividad);
+    actualizarUsuario();
+    actividadesInner(actividad);
+}
+
+function actividadesInner(actividad){
+    let cards = document.createElement("div");
+    cards.className = "card aCard";
+    cards.innerHTML = `<div class="row align-items-center no-gutters">
+    <div class="cardDiv--Img">
+                    <div class="divActividad"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                       <div class="col-md-8">
+                       <div class="card-body cbp"><p class="card-text card-text-m0">Pagaste cuota</p></div>
+                       </div>
+                       <div class="card-body cbp"><div class="w-100"><p class="card-text card-text-m0">$${Math.floor(actividad.monto)}</p><small class="card-text">${actividad.fecha}</small></div>
+                       </div>
+                       </div>
+                       </div>`;
+    let divCards = document.querySelector(".divCardsActividad");
+    divCards.appendChild(cards);
+}
+
+//Actualizar el usuario en el LocalStorage    
+function actualizarUsuario(){
+    if(obtenerIDUsuario(usuarioActual) !== -1){
+        usuarios[obtenerIDUsuario(usuarioActual)] = ua;
+        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    } 
+}
     
         
       

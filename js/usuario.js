@@ -2,9 +2,10 @@ const usuarios = (localStorage.getItem('usuarios') === null ) ? [] : JSON.parse(
 
 //Clase usuarios
 class Usuarios{
-    constructor(nombre, prestamos){
+    constructor(nombre, prestamos, actividades){
         this.nombre = nombre;
         this.prestamos = prestamos;
+        this.actividades = actividades;
     }}
 
 //Verifico si existe el usuario
@@ -21,7 +22,7 @@ function existeUsuario(nombre){
 function obtenerUsuario(nombre){
     for(const usuario of usuarios){  
         if (usuario.nombre === nombre){
-            return new Usuarios(usuario.nombre, usuario.prestamos);
+            return new Usuarios(usuario.nombre, usuario.prestamos, usuario.actividades);
         }
     }
     return {};
@@ -32,7 +33,7 @@ function obtenerUsuarioActual(nombre){
     if (existeUsuario(nombre)){
         return obtenerUsuario(nombre);
     } else {
-        const usuarioActual = new Usuarios(nombre, []);
+        const usuarioActual = new Usuarios(nombre, [], []);
         usuarios.push(usuarioActual);
         localStorage.setItem('usuarios', JSON.stringify(usuarios));
         return usuarioActual;
