@@ -191,8 +191,13 @@ function validarPrestamo(monto){
     if((Number.isInteger(monto) && monto !== 0)){
         continuar = true;
     } else {
-        alert("Debes ingresar un monto y cuotas correctos")
         continuar = false;
+        Swal.fire({
+                                    title: 'Debes ingresar un monto y cuotas correctos',
+                                    icon: 'error',
+                                    confirmButtonColor: "#198754",
+                                    confirmButtonText: 'Aceptar',
+                                })
     }
 }
 
@@ -201,8 +206,13 @@ function validarSeleccionCuotas(){
     if (document.querySelector(".elegido")){
         continuar = true;
     } else {
-        alert("Debes ingresar un monto y cuotas correctos")
         continuar = false;
+        Swal.fire({
+                                    title: 'Debes ingresar un monto y cuotas correctos',
+                                    icon: 'error',
+                                    confirmButtonColor: "#198754",
+                                    confirmButtonText: 'Aceptar',
+                                })    
     }
 }
 
